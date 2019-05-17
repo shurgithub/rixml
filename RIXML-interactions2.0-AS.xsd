@@ -174,8 +174,155 @@ entirely rather than being set to No. </xs:documentation>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="Participants" type="ParticipantsType"> 
+		<xs:annotation>
+			<xs:documentation>This will be the container element containing information about the participants. A participant organization can be a participant with or without individuals being named separately; however, all individuals will be affiliated with a participant organization. For single-person entities (e.g., third party experts), the name of the individual can be used as the participant organization name, but the individual should also be referred to as an individual participant under the participant organization umbrella.</xs:documentation>
+		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="ParticipantsType"></xs:complexType>
+	<xs:complexType name="ParticipantsType">
+		<xs:sequence>
+			<xs:element ref="ParticipantOrganizationCount" maxOccurs="unbounded"></xs:element>
+			<xs:element ref="ParticipantOrganization" maxOccurs="unbounded"></xs:element>			
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ParticipantOrganizationCount" type="ParticipantOrganizationCountType">
+		<xs:annotation>
+			<xs:documentation>Complex element used to record the number of firms participating in an interaction.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="ParticipantOrganizationCountType">
+		<xs:sequence>
+			<xs:element name="OrganizationCategory" type="OrganizationCategoryEnum"/>
+			<xs:element name="OrganizationCount" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="OrganizationCategoryEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Consumer"/>
+			<xs:enumeration value="Corporate"/>
+			<xs:enumeration value="Expert"/>
+			<xs:enumeration value="Provider"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="ParticipantOrganization" type="ParticipantOrganizationType">
+		<xs:annotation>
+			<xs:documentation>Complex element containing details of a firm participating in an interaction. Each firm will have one record with zero, one, or more than one people affiliated.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="ParticipantOrganizationType">
+		<xs:sequence>
+			<!-- should we allow multiple OrganizationCategory values per org? Can it be provider/expert or corporate/expert?? -->
+			<xs:element name="OrganizationCategory" type="OrganizationCategoryEnum"/>
+			<xs:element ref="Organization" maxOccurs="unbounded"></xs:element>
+			<xs:element ref="Participant" maxOccurs="unbounded"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Participant" type="ParticipantType">
+		<xs:annotation>
+			<xs:documentation>Container element for the information about each individual participating in the interaction.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="ParticipantType">
+		<xs:sequence>
+			<xs:element name="PersonDetails" type="PersonDetailsType" maxOccurs="unbounded"/>
+			<xs:element ref="StandardizedRoles" maxOccurs="unbounded"/>
+			<xs:element ref="InteractionParticipantStatus" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="participantID" type="xs:string" use="optional"/>
+		<xs:attribute name="isHost" type="xs:boolean" use="optional"/>
+	</xs:complexType>
+	<xs:element name="StandardizedRoles" type="StandardizedRolesType">
+		<xs:annotation>
+			<xs:documentation>Element to capture the role associated with a participant, as expressed in a standardized list of options. Indicates the person’s role within their firm, not role in the context of the interaction. (See free-text JobTitle tag for the person’s company-defined title.)</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="StandardizedRolesType">
+		<xs:sequence>
+			<xs:element name="StandardizedRole" type="StandardizedRoleEnum"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="StandardizedRoleEnum">
+		<xs:restriction base="xs:string"> <!-- is there a way to further restrict these options to the corresponding org category -->
+			<!-- CONSUMER options -->
+			<xs:enumeration value="BrokerLiason"/>
+			<xs:enumeration value="Compliance"/>
+			<xs:enumeration value="ConsumerAnalyst"/>
+			<xs:enumeration value="ConsumerClientManagement"/>
+			<xs:enumeration value="ConsumerCoordinator"/>
+			<xs:enumeration value="ConsumerIT"/>
+			<xs:enumeration value="ConsumerSales"/>
+			<xs:enumeration value="DirectorOfResearch"/>
+			<xs:enumeration value="PorfolioManager"/>
+			<xs:enumeration value="PublisherDefined"/>
+			<!-- CORPORATE options -->
+			<xs:enumeration value="BoardMember"/>
+			<xs:enumeration value="BoardSecretary"/>
+			<xs:enumeration value="BusinessDevelopment"/>
+			<xs:enumeration value="CEO"/>
+			<xs:enumeration value="CFO"/>
+			<xs:enumeration value="Chairman"/>
+			<xs:enumeration value="CIO-Information"/>
+			<xs:enumeration value="CIO-Investment"/>
+			<xs:enumeration value="CMO"/>
+			<xs:enumeration value="COO"/>
+			<xs:enumeration value="CRO"/>
+			<xs:enumeration value="CSO"/>
+			<xs:enumeration value="CTO"/>
+			<xs:enumeration value="Director"/>
+			<xs:enumeration value="Executive"/>
+			<xs:enumeration value="ExecVicePresident"/>
+			<xs:enumeration value="Founder"/>
+			<xs:enumeration value="GeneralCounsel"/>
+			<xs:enumeration value="HeadOfBusiness"/>
+			<xs:enumeration value="InvestorRelations"/>
+			<xs:enumeration value="ManagingDirector"/>
+			<xs:enumeration value="ManagingPartner"/>
+			<xs:enumeration value="Partner"/>
+			<xs:enumeration value="President"/>
+			<xs:enumeration value="RegionalHead"/>
+			<xs:enumeration value="SeniorVicePresident"/>
+			<xs:enumeration value="Treasurer"/>
+			<xs:enumeration value="ViceChairman"/>
+			<xs:enumeration value="VicePresident"/>
+			<xs:enumeration value="PublisherDefined"/>
+			<!-- THIRD-PARTY options -->
+			<xs:enumeration value="DataScientist"/>
+			<xs:enumeration value="GovernmentExpert"/>
+			<xs:enumeration value="IndustryExpert"/>
+			<xs:enumeration value="MacroStrategist"/>
+			<xs:enumeration value="MedicalExpert"/>
+			<xs:enumeration value="Regulator"/>
+			<xs:enumeration value="PublisherDefined"/>
+			<!-- PROVIDER options -->
+			<xs:enumeration value="AnalystEquity"/>
+			<xs:enumeration value="AnalystFixedIncome"/>
+			<xs:enumeration value="AnalystFX"/>
+			<xs:enumeration value="BusinessDevelopment"/>
+			<xs:enumeration value="Compliance"/>			
+			<xs:enumeration value="COO"/> <!-- dupe of corp value -->
+			<xs:enumeration value="DirectorOfResearch"/>
+			<xs:enumeration value="InvestmentBanker"/>
+			<xs:enumeration value="MacroStrategist"/>
+			<xs:enumeration value="ProviderClientManagement"/>			
+			<xs:enumeration value="ProviderCoordinator"/>
+			<xs:enumeration value="ProviderIT"/>
+			<xs:enumeration value="ProviderManagement"/>
+			<xs:enumeration value="ProviderSales"/>
+			<xs:enumeration value="SpecialistSales"/>
+			<xs:enumeration value="PublisherDefined"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- redefined InteractionParticipantStatusType type separately to be able to move to the datatypes xsd-->
+	<xs:element name="InteractionParticipantStatus" type="InteractionParticipantStatusType"></xs:element> 
+	<xs:simpleType name="InteractionParticipantStatusType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Accepted"/>
+			<xs:enumeration value="Attended"/>
+			<xs:enumeration value="Canceled"/>
+			<xs:enumeration value="LateCancel"/>
+			<xs:enumeration value="NoShow"/>
+			<xs:enumeration value="Rejected"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:element name="InteractionStatusInfo" type="InteractionStatusInfoType">
 		<xs:annotation>
 			<xs:documentation>Container element for the status information for the interaction.</xs:documentation>
@@ -277,18 +424,7 @@ omitted rather than left blank. Container element for the venue information for 
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:element name="InteractionParticipantStatus">
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-				<xs:enumeration value="Attended"/>
-				<xs:enumeration value="Accepted"/>
-				<xs:enumeration value="Canceled"/>
-				<xs:enumeration value="Rejected"/>
-				<xs:enumeration value="NoShow"/>
-				<xs:enumeration value="LateCancel"/>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
+
 	<xs:element name="InteractionRelationshipType">
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
@@ -316,4 +452,4 @@ omitted rather than left blank. Container element for the venue information for 
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
-</xs:schema>
+</xs:schema> 
