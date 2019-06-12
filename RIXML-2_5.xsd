@@ -5,7 +5,7 @@
 Not for distribution unless authorized by RIXML.org
 
 RIXML.org Limited ("RIXML") is a UK incorporated company.  Site content is provided solely by RIXML and is not representative of the views of any one shareholder.  Unless otherwise stated RIXML is solely responsible for site content. Terms and conditions of use are published on the web site at www.rixml.org.  Copyright 2000-2017. All rights reserved.-->
-<xs:schema targetNamespace="http://www.rixml.org/2017/9/RIXML" xmlns="http://www.rixml.org/2017/9/RIXML" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:rixmldt="http://www.rixml.org/2017/9/RIXML-datatypes" xmlns:rixml="http://www.rixml.org/2017/9/RIXML" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns="http://www.rixml.org/2017/9/RIXML" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:rixmldt="http://www.rixml.org/2017/9/RIXML-datatypes" xmlns:rixml="http://www.rixml.org/2017/9/RIXML" targetNamespace="http://www.rixml.org/2017/9/RIXML" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:include schemaLocation="RIXML-Common-2_5.xsd">
 		<xs:annotation>
 			<xs:documentation source="This includes a new common schema that has moved the majority of the schema definitions into a new module that has no namespace.  This is to facilitate re-use of the schema."/>
