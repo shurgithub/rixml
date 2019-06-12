@@ -1,1 +1,2 @@
-rixml interactions 2.0 working version
+rixml interactions 2.1 
+first full draft
