@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--Copyright (c) 2000-2017 RIXML.org-->
 <!--RIXML Specification Version 2.5
 
@@ -2402,9 +2402,9 @@ Publishers are also able to provide publisher defined sector / industry tags,  g
 			<xs:attribute name="interactionRelationshipType" type="rixmldt:InteractionRelationshipTypeEnum" use="required"/>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="InteractionParticipantStatus">
+	<!--xs:element name="InteractionParticipantStatus">
 		<xs:complexType>
-			<xs:attribute name="interactionParticipantStatusType" type="rixmldt:InteractionParticipantStatusTypeEnum" use="required"/>
+			<xs:attribute name="interactionParticipantStatusType" type="rixmldt:InteractionParticipantStatusEnum" use="required"/>
 		</xs:complexType>
-	</xs:element>
+	</xs:element-->
 </xs:schema>
