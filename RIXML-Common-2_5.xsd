@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--Copyright (c) 2000-2017 RIXML.org-->
 <!--RIXML Specification Version 2.5
 
@@ -2347,4 +2347,64 @@ Publishers are also able to provide publisher defined sector / industry tags,  g
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="InteractionPurpose">
+		<xs:complexType>
+			<xs:attribute name="interactionPurpose" type="rixmldt:InteractionPurposeEnum" use="required">
+				<xs:annotation>
+					<xs:documentation>The type of interaction – analyst marketing, model, deal roadshow, etc.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="InteractionLevel">
+		<xs:complexType>
+			<xs:attribute name="interactionLevel" type="rixmldt:InteractionLevelEnum" use="required">
+				<xs:annotation>
+					<xs:documentation>Indicates whether the interaction was interactive, one-directional, or was a delivered (electronic or physical) product.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="InteractionMode">
+		<xs:complexType>
+			<xs:attribute name="interactionMode" type="rixmldt:InteractionModeEnum" use="required">
+				<xs:annotation>
+					<xs:documentation>Enumeration list field that indicates the manner in which an interaction occurred (in person, email, data feed, etc.).</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="InteractionReason">
+		<xs:complexType>
+			<xs:attribute name="interactionReason" type="rixmldt:InteractionReasonEnum" use="required">
+				<xs:annotation>
+					<xs:documentation>						
+						Indicates whether the interaction was initiated by the
+						consumer, was initiated by the provider with a specific consumer in mind, or was initiated by the
+						provider for a more general audience.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="InteractionDateType">
+		<xs:complexType>
+			<xs:attribute name="interactionDateType" type="rixmldt:InteractionDateTypeEnum" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Venue">
+		<xs:complexType>
+			<xs:attribute name="venueType" type="rixmldt:VenueTypeEnum" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="InteractionRelationship">
+		<xs:complexType>
+			<xs:attribute name="interactionRelationshipType" type="rixmldt:InteractionRelationshipTypeEnum" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<!--xs:element name="InteractionParticipantStatus">
+		<xs:complexType>
+			<xs:attribute name="interactionParticipantStatusType" type="rixmldt:InteractionParticipantStatusEnum" use="required"/>
+		</xs:complexType>
+	</xs:element-->
 </xs:schema>
