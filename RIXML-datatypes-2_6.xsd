@@ -1016,7 +1016,7 @@ RIXML.org Limited ("RIXML") is a UK incorporated company.  Site content is provi
 			<xs:enumeration value="n/a"/>
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="VenueTypeEnum">
+	<xs:simpleType name="InteractionVenueTypeEnum">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="Onsite">
 				<xs:annotation>
