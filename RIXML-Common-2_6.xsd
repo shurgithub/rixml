@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<!--Copyright (c) 2000-2017 RIXML.org-->
+<!--Copyright (c) 2000-2019 RIXML.org-->
 <!--RIXML Specification Version 2.6
 
 Not for distribution unless authorized by RIXML.org
 
-RIXML.org Limited ("RIXML") is a UK incorporated company.  Site content is provided solely by RIXML and is not representative of the views of any one shareholder.  Unless otherwise stated RIXML is solely responsible for site content. Terms and conditions of use are published on the web site at www.rixml.org.  Copyright 2000-2017. All rights reserved.-->
+RIXML.org Limited ("RIXML") is a UK incorporated company.  Site content is provided solely by RIXML and is not representative of the views of any one shareholder.  Unless otherwise stated RIXML is solely responsible for site content. Terms and conditions of use are published on the web site at www.rixml.org.  Copyright 2000-2019. All rights reserved.-->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:rixmldt="http://www.rixml.org/2017/9/RIXML-datatypes" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:import namespace="http://www.rixml.org/2017/9/RIXML-datatypes" schemaLocation="RIXML-datatypes-2_6.xsd"/>
 	<!--ComplexTypes for re-use-->
