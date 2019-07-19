@@ -293,11 +293,6 @@ RIXML.org Limited ("RIXML") is a UK incorporated company.  Site content is provi
 			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="InteractionDateType">
-		<xs:complexType>
-			<xs:attribute name="interactionDateType" type="rixmldt:InteractionDateTypeEnum" use="required"/>
-		</xs:complexType>
-	</xs:element>
 	<xs:element name="InteractionRelationship">
 		<xs:complexType>
 			<xs:attribute name="interactionRelationshipType" type="rixmldt:InteractionRelationshipTypeEnum" use="required"/>
@@ -333,9 +328,9 @@ RIXML.org Limited ("RIXML") is a UK incorporated company.  Site content is provi
 	</xs:complexType>
 	<xs:complexType name="InteractionDateDetailsType">
 		<xs:sequence>
-			<xs:element name="interactionDateTime" type="xs:dateTime" minOccurs="0"/>
-			<xs:element name="interactionDateType" minOccurs="0"/>
-			<xs:element name="interactionDuration" type="xs:int" minOccurs="0"/>
+			<xs:element name="InteractionDateTime" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="InteractionDateType" type="rixmldt:InteractionDateTypeEnum" minOccurs="0"/>
+			<xs:element name="InteractionDuration" type="xs:int" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="InteractionVenueType">
