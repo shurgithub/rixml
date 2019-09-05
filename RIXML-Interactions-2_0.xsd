@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--Copyright (c) 2000-2019 RIXML.org-->
-<!--RIXML Specification Version 2.6
+<!--RIXML Interactions Standard Version 2.0
 
 Not for distribution unless authorized by RIXML.org
 
@@ -30,7 +30,8 @@ RIXML.org Limited ("RIXML") is a UK incorporated company.  Site content is provi
 	</xs:element>
 	<xs:element name="Participants" type="ParticipantsType">  
 		<xs:annotation>
-			<xs:documentation>This will be the container element containing information about the participants. A participant organization can be a participant with or without individuals being named separately; however, all individuals will be affiliated with a participant organization. For single-person entities (e.g., third party experts), the name of the individual can be used as the participant organization name, but the individual should also be referred to as an individual participant under the participant organization umbrella.</xs:documentation>
+			<xs:documentation>This is the container element containing information about the participants. All individuals will be affiliated with a participant organization. For single-person entities (e.g., some third party experts), the name of the individual can be used as the participant organization name, but the individual should also be referred to as an individual participant under the participant organization umbrella. 
+The Source package that exists in the common schema allows for (but does not require) a great deal of information about the individuals and firms participating in an interaction, including the areas of expertise for third-party experts.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:element name="InteractionStatusInfo" type="InteractionStatusInfoType">
@@ -39,6 +40,8 @@ RIXML.org Limited ("RIXML") is a UK incorporated company.  Site content is provi
 		</xs:annotation>
 	</xs:element>
 	<xs:element name="InteractionTopic" type="InteractionTopicType"> 
+        <xs:annotation>
+        	<xs:documentation>This is the complex element containing information about the topic of the interaction, including identifying the companies, regions, sectors, industries, etc. that are the topic of the interaction. Note that all of this information is optional; firms can include or omit this as desired to provide additional details about the interaction’s purpose. Although this information could be contained in the InteractionName and/or InteractionComment fields, the InteractionTopic complex element will enable presenting this information in a structured format. </xs:documentation></xs:annotation>
 	</xs:element>
 	<xs:element name="Related" type="RelatedType">
 		<xs:annotation>
@@ -100,146 +103,200 @@ RIXML.org Limited ("RIXML") is a UK incorporated company.  Site content is provi
 	<!--TL Complex Types-->
 	<xs:complexType name="InteractionType">
 		<xs:annotation>
-			<xs:documentation>ComplexType for Interaction</xs:documentation>
+			<xs:documentation>InteractionType is the complex type containing all information for the interaction record.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element ref="InteractionRecordCreator"/>
-			<xs:element ref="InteractionDetails"/>
-			<xs:element ref="Participants"/> 	
-			<xs:element ref="InteractionStatusInfo" maxOccurs="unbounded"/>
-			<xs:element ref="InteractionTopic" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element ref="Related" minOccurs="0"/>
+			<xs:element ref="InteractionRecordCreator">
+				<xs:annotation>
+					<xs:documentation>Complex type containing information about the person who created the Interaction record. Appears here rather than in the Participant container element because the record creator may have no other role in the interaction (e.g., an administrative assistant to the interaction host). In cases where the record creator is also a participant, the person would appear in both locations. </xs:documentation></xs:annotation></xs:element>
+			<xs:element ref="InteractionDetails">
+				<xs:annotation>
+					<xs:documentation>Complex type containing information about the interaction itself.</xs:documentation></xs:annotation></xs:element>
+			<xs:element ref="Participants">
+				<xs:annotation>
+					<xs:documentation>Complex element containing information about the participants. All individuals will be affiliated with a participant organization. For single-person entities (e.g., some third party experts), the name of the individual can be used as the participant organization name, but the individual should also be referred to as an individual participant under the participant organization umbrella. 
+The Source package that exists in the common schema allows for (but does not require) a great deal of information about the individuals and firms participating in an interaction, including the areas of expertise for third-party experts.
+</xs:documentation>
+				</xs:annotation></xs:element> 	
+			<xs:element ref="InteractionStatusInfo" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Complex type for the status information for the interaction. As with the status tag in the Research standard, the status will pertain to the status of the interaction itself AND of any routine changes/updates to the interaction record. However, status information about individual participants will be located in the Participants area; additionally, information about the start/end date of the interaction will be housed in the InteractionDates area.</xs:documentation></xs:annotation></xs:element>
+			<xs:element ref="InteractionTopic" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>This is the complex element containing information about the topic of the interaction, including identifying the companies, regions, sectors, industries, etc. that are the topic of the interaction. Note that all of this information is optional; firms can include or omit this as desired to provide additional details about the interaction’s purpose. Although this information could be contained in the InteractionName and/or InteractionComment fields, the InteractionTopic complex element will enable presenting this information in a structured format. </xs:documentation></xs:annotation></xs:element>
+			<xs:element ref="Related" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Complex element containing information about related interactions and/or research content. Related interactions would include the conference that a particular interaction is part of or a prior interaction that this interaction is a follow up interaction to; related research content would include a data feed file or a research report. Related research content would be described using the RIXML Research Standard.</xs:documentation>
+				</xs:annotation></xs:element>
 		</xs:sequence>
 		<xs:attribute name="interactionRecordID" type="xs:string" use="required">
 			<xs:annotation>
-				<xs:documentation>
-					Unique identifier used to identify the interaction record. In cases where an event included multiple interaction consumers, there will be separate interaction record sent to each consumer firm that contains only the attendee information for attendees from that firm. This InteractionRecordID tag is the unique identifier for the record itself, and will be required. In interactions where more than one consumer firm has participated (a blast email, a breakout session at a conference, etc.), the InteractionID and all other information contained in the record will be the identical, except for the consumer participant information and the unique identifier contained in this InteractionRecordID tag. Thus, this is the unique identifier for this specific interaction + the participant information contained in this record. Any status changes, etc. provided to the consumer firm about this interaction should maintain the same InteractionRecordID, using multiple timestamped Status entries (see below) to track the changes. Use of a Universal Unique IDentifier (UUID), as described on page 21 of the RIXML Research Data Dictionary, is recommended.
-				</xs:documentation>
+				<xs:documentation>Unique identifier used to identify the interaction record. In cases where an event included multiple interaction consumers, there will be a separate interaction record sent to each consumer firm that contains only the attendee information for attendees from that firm. This interactionRecordID attribute is the unique identifier for the record itself, and is required. In interactions with more than one consumer firm (a blast email, a breakout session at a conference, etc.), the interactionID and all other information contained in the record will be the identical, except for the consumer participant information and the unique identifier contained in this interactionRecordID tag. Thus, this is the unique identifier for this specific interaction + the participant information contained in this record. Any status changes, etc. provided to the consumer firm about this interaction should maintain the same interactionRecordID, using multiple timestamped Status entries (see below) to track the changes. Use of a Universal Unique IDentifier (UUID), as described on page 21 of the RIXML Research v2.5 Data Dictionary, is recommended.		</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="interactionID" type="xs:string">
 			<xs:annotation>
-				<xs:documentation>
-					The identifier that uniquely identifies the interaction being described in the interaction record. In cases
-					where there is only one record, the same unique identifier can be used for interactionID and
-					interactionRecordID; when there are multiple, then interactionID will be the same for each record, and
-					the interactionRecordID will be a unique identifier for the record itself.
-				</xs:documentation>
+				<xs:documentation>The identifier that uniquely identifies the interaction being described in the interaction record. In cases where there is only one record (i.e., an interaction with only one consumer organization), the same unique identifier can be used for interactionID and interactionRecordID; when there are multiple, the interactionID (this attribute) will be the same for each record, and the interactionRecordID will be a unique identifier for the record itself. 
+interactionID is not required, but note that the relatedInteractionID tag references the interactionID tag. Although the interactionID tag is not required, it is necessary for the tag to be populated in any record for which the relatedInteractionID would like to make a connection. Further, in cases where an interaction is a sub-event of a larger event, there will be an interaction record for each. In the sub-event record, the interactionID tag is used for the sub-event, and the Related container element provides the information for the parent event. Similarly, the parent event will have an interaction record, with references to the sub-event(s) indicated in the Related container element. Other events that are considered related can also be indicated, if desired.
+</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="InteractionRecordCreatorType">
 		<xs:annotation>
-			<xs:documentation>complexType for InteractionRecordCreatorType</xs:documentation>
+			<xs:documentation>Complex type containing information about the person who created the Interaction record. Appears here rather than in the Participant container element because the record creator may have no other role in the interaction (e.g., an administrative assistant to the interaction host). In cases where the record creator is also a participant, the person would appear in both locations. </xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element ref="RecordCreatorOrganization" minOccurs="1" maxOccurs="1"/>
-			<xs:element ref="RecordCreatorName" minOccurs="1" maxOccurs="1"/>
+			<xs:element ref="RecordCreatorOrganization" minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Firm name for the person who created the record. Uses OrganizationType complex type from common schema, which only requires firm name. Additional elements and attributes can be used, if desired, but are not required.</xs:documentation></xs:annotation></xs:element>
+			<xs:element ref="RecordCreatorName" minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>The name of the person who created the record. Uses PersonDetailsType complex type from common schema.</xs:documentation></xs:annotation></xs:element>
 		</xs:sequence>
 	</xs:complexType>	
 	<xs:complexType name="InteractionDetailsType">
-		<xs:sequence>
+        <xs:annotation>
+        	<xs:documentation>Complex type containing information about the interaction itself.</xs:documentation></xs:annotation>
+        <xs:sequence>
 			<xs:element name="InteractionName" type="xs:string">
 				<xs:annotation>
-					<xs:documentation>
-							The "title" of the interaction, a name or short description that all participants would recognize to
-							identify or describe the event. Does not need to be unique.		
-						</xs:documentation>
+					<xs:documentation>The "title" of the interaction, a name or short description that all participants would recognize to identify or describe the event. Does not need to be unique.			</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="InteractionComment" type="xs:string" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>
-							Free text comment field.
-						</xs:documentation>
+					<xs:documentation>Free text comment field.						</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element ref="InteractionPurpose" minOccurs="0"/>
-			<xs:element ref="InteractionLevel" minOccurs="0"/>
-			<xs:element ref="InteractionMode" minOccurs="0"/>
-			<xs:element ref="InteractionReason" minOccurs="0"/>
+			<xs:element ref="InteractionPurpose" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The purpose of interaction – analyst marketing, model, deal roadshow, etc.</xs:documentation></xs:annotation></xs:element>
+			<xs:element ref="InteractionLevel" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Indicates whether the interaction was interactive, one-directional, or was a delivered (electronic or physical) product.</xs:documentation></xs:annotation></xs:element>
+			<xs:element ref="InteractionMode" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Enumeration list field that indicates the manner in which an interaction occurred (in person, email, data feed, etc.).</xs:documentation></xs:annotation></xs:element>
+			<xs:element ref="InteractionReason" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Indicates whether the interaction was initiated by the consumer, was initiated by the provider with a specific consumer in mind, or was initiated by the provider for a more general audience.</xs:documentation></xs:annotation></xs:element>
 			<xs:element name="BlastInteraction" type="xs:boolean" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>
-						Flag to indicate whether the interaction is considered a blast interaction by the interaction provider.Applies only to InteractionModes of
-						VoiceMail or Email, and only if the voicemail or email was distributed to multiple firms (or was not
-						customized for an individual person/firm). For all other InteractionModes, this tag should be omitted
-						entirely rather than being set to No.
-					</xs:documentation>
+					<xs:documentation>Flag to indicate whether the interaction is considered a blast interaction by the interaction provider. Applies only to InteractionModes of VoiceMail or Email, and only if the voicemail or email was distributed to multiple firms (or was not customized for an individual person/firm). For all other InteractionModes, this tag should be omitted entirely rather than being set to "false".					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="ScheduledInteraction" type="xs:boolean" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>
-						Flag to identify whether an interaction is delivered on a regular basis (data feed, etc).
-					</xs:documentation>
+					<xs:documentation>Flag to identify whether an interaction is delivered on a regular basis (data feed, etc.). </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="HighValue" type="xs:boolean" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>
-						Flag to indicate whether the interaction provider predicts the interaction to be perceived as high value
-						by the interaction consumer, or has been told by the interaction consumer that it should be tagged as
-						such.
-					</xs:documentation>
+					<xs:documentation>Flag to indicate whether the interaction provider predicts the interaction to be perceived as high value by the interaction consumer, or has been told by the interaction consumer that it should be tagged as such.			</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="InteractionDates">
 				<xs:annotation>
-					<xs:documentation>Container element containing details of the dates(s) associated with the interaction. These are the dates related to the interaction itself (start date/time, end date/time, etc.), not timestamps related to the interaction record. Each interaction record requires at least one date.</xs:documentation>
+					<xs:documentation>Complex type containing details of the dates(s) associated with the interaction. These are the dates related to the interaction itself (start date/time, end date/time, etc.), not timestamps related to the interaction record. Each interaction record requires at least one date.</xs:documentation>
 				</xs:annotation>
 				<xs:complexType>
 					<xs:sequence maxOccurs="unbounded">
-						<xs:element name="InteractionDate" type="InteractionDateDetailsType"/>
+						<xs:element name="InteractionDate" type="InteractionDateDetailsType">
+							<xs:annotation>
+								<xs:documentation></xs:documentation>
+							</xs:annotation></xs:element>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element ref="InteractionVenue" minOccurs="0"/>
+			<xs:element ref="InteractionVenue" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Complex type containing details of the location associated with the interaction, when relevant.  For interactions that do not occur in person (phone calls, voicemail, data feed, etc.), this tag should be omitted rather than left blank.</xs:documentation></xs:annotation></xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ParticipantsType">
-		<xs:sequence>
-			<xs:element ref="ParticipantOrganizationCount" maxOccurs="unbounded"></xs:element>
-			<xs:element ref="ParticipantOrganization" maxOccurs="unbounded"></xs:element>			
+        <xs:annotation>
+        	<xs:documentation>Complex element containing information about the participants. All individuals will be affiliated with a participant organization. For single-person entities (e.g., some third party experts), the name of the individual can be used as the participant organization name, but the individual should also be referred to as an individual participant under the participant organization umbrella. 
+The Source package that exists in the common schema allows for (but does not require) a great deal of information about the individuals and firms participating in an interaction, including the areas of expertise for third-party experts.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+			<xs:element ref="ParticipantOrganizationCount" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Complex type used to record the number of firms participating in an interaction.</xs:documentation>
+				</xs:annotation></xs:element>
+			<xs:element ref="ParticipantOrganization" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Complex type containing details of a firm participating in an interaction, including details about the firm and about the individuals from that firm participating in the interaction. Each firm will have its own ParticipantOrganizationType element with zero, one, or more than one people affiliated. </xs:documentation></xs:annotation></xs:element>			
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ParticipantOrganizationCountType">
 		<xs:sequence>
-			<xs:element name="OrganizationCategory" type="rixmldt:OrganizationCategoryEnum"/>
-			<xs:element name="OrganizationCount" type="xs:int"/>
+			<xs:element name="OrganizationCategory" type="rixmldt:OrganizationCategoryEnum">
+				<xs:annotation>
+					<xs:documentation>Indicates the type of organization being described. Each type of organization that occurs in the ParticipantOrganization complex element should be captured.</xs:documentation></xs:annotation></xs:element>
+			<xs:element name="OrganizationCount" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>Integer indicating the number of organizations (firms, not individuals) of that type involved in the interaction. There will generally be one interaction provider firm. All corporate and expert organizations (if applicable) should match the number of firms represented in the ParticipantOrganization tags. However, the number of Consumer firms may not, since each consumer firm will only receive the consumer firm-related data for their own firm.</xs:documentation></xs:annotation></xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ParticipantOrganizationType"> 
-		<xs:sequence>
-			<xs:element name="OrganizationCategory" type="rixmldt:OrganizationCategoryEnum"/>
-			<xs:element ref="Organization" maxOccurs="unbounded"></xs:element>
-			<xs:element ref="Participant" maxOccurs="unbounded"></xs:element>
+        <xs:annotation>
+        	<xs:documentation>Complex type containing details of a firm participating in an interaction, including details about the firm and about the individuals from that firm participating in the interaction. Each firm will have its own ParticipantOrganizationType element with zero, one, or more than one people affiliated.</xs:documentation></xs:annotation>
+        <xs:sequence>
+			<xs:element name="OrganizationCategory" type="rixmldt:OrganizationCategoryEnum">
+				<xs:annotation>
+					<xs:documentation>Organization types will include: Provider, Consumer, Corporate, and Expert. </xs:documentation></xs:annotation></xs:element>
+			<xs:element ref="Organization" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Describes an organization related to the interaction record. Multiple organizations are generally related to one interaction record – at a minimum, the interaction provider and at least one interaction consumer. </xs:documentation></xs:annotation></xs:element>
+			<xs:element ref="Participant" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Complex type for the information about each individual participating in the interaction.</xs:documentation></xs:annotation></xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ParticipantType">
-		<xs:sequence>
-			<xs:element name="PersonDetails" type="PersonDetailsType" maxOccurs="unbounded"/>
-			<xs:element ref="StandardizedRoles" maxOccurs="unbounded"/>
-			<xs:element name="InteractionParticipantStatus" type="rixmldt:InteractionParticipantStatusEnum" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:annotation>
+        	<xs:documentation>Complex type for the information about each individual participating in the interaction.</xs:documentation></xs:annotation>
+        <xs:sequence>
+			<xs:element name="PersonDetails" type="PersonDetailsType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Complex type collecting the information about each person participating in the interaction (including record creator).</xs:documentation></xs:annotation></xs:element>
+			<xs:element ref="StandardizedRoles" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Complex type to capture the role associated with a participant, as expressed in a standardized list of options. Indicates the person’s role within their firm, not role in the context of the interaction. (See free-text JobTitle tag for the person’s company-defined title.)</xs:documentation></xs:annotation></xs:element>
+			<xs:element name="InteractionParticipantStatus" type="InteractionParticipantStatusType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Indicates the status of the individual in the context of the interaction. (NOTE: not to be confused with the Status complex type, which contains information surrounding the status of the interaction itself.) InteractionParticipantStatus can be updated multiple times as that participant’s status changes; at a minimum, it should definitely be updated (with timestamp) once meeting has occurred to ensure accurate recording of actual attendance. Any participant with status of Accepted should be updated once the interaction has occurred. A workflow could either include manually updating every individual participant to the appropriate post-interaction status (no show, attended, etc.), or that those who did NOT attend would be manually updated, and an automatic sweep would update everyone else to Attended.</xs:documentation>
+				</xs:annotation></xs:element>
 		</xs:sequence>
-		<xs:attribute name="participantID" type="xs:string" use="optional"/>
-		<xs:attribute name="isHost" type="xs:boolean" use="optional"/>
+		<xs:attribute name="participantID" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>A unique identifier used to identify each participant in the interaction. For accurate identification it is required that the personID be unique for a given publisher/provider, but the implementation of the ID is left to the publishers/providers to implement as they deem fit. Examples: email address, combination of LastName and FirstName, combination of internal employee ID and RIXML publisher ID. For records that are submitted to or through third-party aggregator(s), the PersonLabel complex element (within the Person element) can be used to provide the person identifier required for each aggregator.</xs:documentation></xs:annotation></xs:attribute>
+		<xs:attribute name="isHost" type="xs:boolean" use="optional">
+			<xs:annotation>
+				<xs:documentation>Optional flag to indicate whether an individual served as the host of the interaction. Should be omitted if the participant was not the host.</xs:documentation></xs:annotation></xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="InteractionStatusInfoType">
-		<xs:sequence>
-			<xs:element name="InteractionStatusType" type="rixmldt:InteractionStatusTypeEnum"/>
-			<xs:element name="InteractionStatusDateTime" type="xs:dateTime"/>
+        <xs:annotation>
+        	<xs:documentation>Complex type for the status information for the interaction. As with the status tag in the Research standard, the status will pertain to the status of the interaction itself AND of any routine changes/updates to the interaction record. However, status information about individual participants will be located in the Participants area; additionally, information about the start/end date of the interaction will be housed in the InteractionDates area.</xs:documentation></xs:annotation>
+        <xs:sequence>
+			<xs:element name="InteractionStatusType" type="rixmldt:InteractionStatusTypeEnum">
+				<xs:annotation>
+					<xs:documentation>Indicates the status represented by the interactionStatusDate timestamp. Firms that will be using this schema to disseminate information exclusively for interactions that actually occurred will likely only use the Delivered status type. Firms that use this schema for internal systems and/or for disseminating information about events at various stages of interaction lifecycle will use the other enumerations as well. For clarity, it is recommended that firms either use just the final status of the interaction or provide the entire interaction lifecycle, rather than providing some (but not all) parts of the lifecycle.</xs:documentation></xs:annotation></xs:element>
+			<xs:element name="InteractionStatusDateTime" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Indicates the date and time at which the status was assigned. It is expressed using ISO 8601 as refined by the World Wide Web Consortium's note http://www.w3.org/TR/NOTE-datetime. In addition, RIXML requires the use of Zulu time or Z-time (GMT +/- n hours:minute:seconds). All times are absolute and easier to compute, rather than using a relative (i.e. 08:30 +5) time.</xs:documentation></xs:annotation></xs:element>
 			<xs:element name="CurrentStatusIndicator" type="xs:boolean">
 				<xs:annotation>
-					<xs:documentation>
-						Indicates whether or not the statusType is current -- i.e. the most recent.Note that while a product can have multiple statuses, only one of them can be current.
-					</xs:documentation>
+					<xs:documentation>Indicates whether or not the statusType is current -- i.e. the most recent. Note that while a product can have multiple statuses, only one of them can be current.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="InteractionTopicType"> 
-		<xs:sequence>
+        <xs:annotation>
+        	<xs:documentation>This is the complex element containing information about the topic of the interaction, including identifying the companies, regions, sectors, industries, etc. that are the topic of the interaction. Note that all of this information is optional; firms can include or omit this as desired to provide additional details about the interaction’s purpose. Although this information could be contained in the InteractionName and/or InteractionComment fields, the InteractionTopic complex element will enable presenting this information in a structured format.</xs:documentation></xs:annotation>
+        <xs:sequence>
 			<xs:element ref="AssetClass" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="Region" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="SectorIndustry" minOccurs="0" maxOccurs="unbounded"/>
@@ -247,9 +304,15 @@ RIXML.org Limited ("RIXML") is a UK incorporated company.  Site content is provi
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="RelatedType">
-		<xs:sequence>
-			<xs:element ref="RelatedProducts" minOccurs="0"/>
-			<xs:element ref="RelatedInteractions" minOccurs="0"/>
+        <xs:annotation>
+        	<xs:documentation>This is the container element containing information about related interactions and/or research content. Related interactions would include the conference that a particular interaction is part of or a prior interaction that this interaction is a follow up interaction to; related research content would include a data feed file or a research report. Related research content would be described using the RIXML Research Standard.</xs:documentation></xs:annotation>
+        <xs:sequence>
+			<xs:element ref="RelatedProducts" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Describes how content contained in this product or interaction is associated with other products, or how content in other products is associated with this product or interaction. Can have none or any number of relationships to other products or interactions.</xs:documentation></xs:annotation></xs:element>
+			<xs:element ref="RelatedInteractions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Describes how content contained in this interaction record is associated with other interactions, or how content in other interactions is associated with this one. Can have none or any number of relationships to other interactions.</xs:documentation></xs:annotation></xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<!--Child Complex Types-->
@@ -300,44 +363,86 @@ RIXML.org Limited ("RIXML") is a UK incorporated company.  Site content is provi
 	</xs:element>
 	<xs:complexType name="StandardizedRolesType">
 		<xs:sequence>
-			<xs:element name="StandardizedRole" type="rixmldt:StandardizedRoleEnum"/>
+			<xs:element name="StandardizedRole" type="rixmldt:StandardizedRoleEnum">
+				<xs:annotation>
+					<xs:documentation>Enumeration list-limited tag defining the person’s role within his/her firm. May or may not match person’s title. The RoleEnum list contains guidance regarding which roles are valid for each participant type (consumer, corporate, third party, or provider).</xs:documentation></xs:annotation></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InteractionParticipantStatusType">
+        <xs:annotation>
+        	<xs:documentation>Indicates the status of the individual in the context of the interaction. (NOTE: not to be confused with the Status complex type, which contains information surrounding the status of the interaction itself.) InteractionParticipantStatus can be updated multiple times as that participant’s status changes; at a minimum, it should definitely be updated (with timestamp) once meeting has occurred to ensure accurate recording of actual attendance. Any participant with status of Accepted should be updated once the interaction has occurred. A workflow could either include manually updating every individual participant to the appropriate post-interaction status (no show, attended, etc.), or that those who did NOT attend would be manually updated, and an automatic sweep would update everyone else to Attended.</xs:documentation></xs:annotation>
+        <xs:sequence>
+			<xs:element name="ParticipantStatus" type="rixmldt:InteractionParticipantStatusEnum">
+				<xs:annotation>
+					<xs:documentation>Indicates the participant’s status as related to the associated StatusTimeStamp.</xs:documentation></xs:annotation></xs:element>	
+			<xs:element name="StatusTimeStamp" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Indicates the timestamp for the related status.</xs:documentation></xs:annotation></xs:element>	
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="RelatedProductsType">
-		<xs:sequence>
+        <xs:annotation>
+        	<xs:documentation>Describes how content contained in this product or interaction is associated with other products, or how content in other products is associated with this product or interaction. Can have none or any number of relationships to other products or interactions.</xs:documentation></xs:annotation>
+        <xs:sequence>
 			<xs:element ref="RelatedProduct" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="RelatedInteractionsType">
-		<xs:sequence>
-			<xs:element ref="RelatedInteraction" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:annotation>
+        	<xs:documentation>Describes how content contained in this interaction record is associated with other interactions, or how content in other interactions is associated with this one. Can have none or any number of relationships to other interactions.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+			<xs:element ref="RelatedInteraction" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Describes how content contained in this interaction record is associated with other interactions, or how content in other interactions is associated with this one. Can have none or any number of relationships to other interactions.</xs:documentation></xs:annotation></xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="RelatedInteractionType">
-		<xs:sequence>
+        <xs:annotation>
+        	<xs:documentation>Describes how content contained in this interaction record is associated with other interactions, or how content in other interactions is associated with this one. Can have none or any number of relationships to other interactions.</xs:documentation></xs:annotation>
+        <xs:sequence>
 			<xs:element name="relatedInteractionID" type="xs:string">
 				<xs:annotation>
-					<xs:documentation>
-						Describes how content contained in this interaction is associated with other interactions, or how content in other interactions is associated with this one. Can have none or any number of relationships to other interactions.
-				</xs:documentation>
+					<xs:documentation>The unique interactionID of the interaction to which this interaction is related (as stored in InteractionID of the related document).</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="InteractionRelationshipType" type="rixmldt:InteractionRelationshipTypeEnum"/>
-			<xs:element name="RelationshipDescription" type="xs:string" minOccurs="0"/>
+			<xs:element name="InteractionRelationshipType" type="rixmldt:InteractionRelationshipTypeEnum">
+				<xs:annotation>
+					<xs:documentation>Indicates the type of relationship between this interaction and a related interaction.</xs:documentation>
+				</xs:annotation></xs:element>
+			<xs:element name="RelationshipDescription" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The description of the relationship between the current interaction and the other interaction to which it is related.</xs:documentation>
+				</xs:annotation></xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="InteractionDateDetailsType">
-		<xs:sequence>
-			<xs:element name="InteractionDateTime" type="xs:dateTime" minOccurs="0"/>
-			<xs:element name="InteractionDateType" type="rixmldt:InteractionDateTypeEnum" minOccurs="0"/>
-			<xs:element name="InteractionDuration" type="xs:int" minOccurs="0"/>
+        <xs:annotation>
+        	<xs:documentation>Complex type containing the information pertaining to each instance of an InteractionDate complex type used in an interaction record. All elements are optional; however, there should be one instance of either InteractionDateTime OR InteractionDuration each time this complex type is used. Note that there is no mechanism in the standard to ensure consistency between an interaction’s start/end time and the duration indicated in the InteractionDuration element; this consistency must be built into systems using this standard.</xs:documentation></xs:annotation>
+        <xs:sequence>
+			<xs:element name="InteractionDateTime" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Timestamp representing the date/time type indicated in the interactionDateType.</xs:documentation></xs:annotation></xs:element>
+			<xs:element name="InteractionDateType" type="rixmldt:InteractionDateTypeEnum" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Type of interaction date/time representated by the interactionDateTime timestamp.</xs:documentation></xs:annotation></xs:element>
+			<xs:element name="InteractionDuration" type="xs:int" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Duration of interaction, expressed in minutes.</xs:documentation>
+				</xs:annotation></xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="InteractionVenueType">
-		<xs:sequence>
-			<xs:element name="VenueName" type="xs:string"/>
+        <xs:annotation>
+        	<xs:documentation>Complex type containing details of the location associated with the interaction, when relevant.  For interactions that do not occur in person (phone calls, voicemail, data feed, etc.), this tag should be omitted rather than left blank. </xs:documentation></xs:annotation>
+        <xs:sequence>
+			<xs:element name="VenueName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Name of venue for the interaction.</xs:documentation></xs:annotation></xs:element>
 			<xs:element ref="Address"/>
 		</xs:sequence>
-		<xs:attribute name="venueType" type="rixmldt:InteractionVenueTypeEnum" use="required"/>
+		<xs:attribute name="venueType" type="rixmldt:InteractionVenueTypeEnum" use="required">
+			<xs:annotation>
+				<xs:documentation>Attribute used to indicate the type of venue for the interaction.</xs:documentation></xs:annotation></xs:attribute>
 	</xs:complexType>
 </xs:schema> 

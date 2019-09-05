@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--Copyright (c) 2000-2019 RIXML.org-->
-<!--RIXML Specification Version 2.6
+<!--RIXML Common Schema Version 2.6
 
 Not for distribution unless authorized by RIXML.org
 
@@ -10,7 +10,7 @@ RIXML.org Limited ("RIXML") is a UK incorporated company.  Site content is provi
 	<!--ComplexTypes for re-use-->
 	<xs:complexType name="ContactInfoType">
 		<xs:annotation>
-			<xs:documentation>ComplexType for ContactInfo</xs:documentation>
+			<xs:documentation>The ContactInfo complex type contains the contact information for the organization or person being described. Can describe address, phone, email, IM and/or website contact information, at least one of which is required.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element ref="InstantMessenger" minOccurs="0" maxOccurs="unbounded"/>
@@ -31,7 +31,7 @@ RIXML.org Limited ("RIXML") is a UK incorporated company.  Site content is provi
 		</xs:attribute>
 		<xs:attribute name="purpose" type="rixmldt:ContactInfoPurposeEnum" use="optional">
 			<xs:annotation>
-				<xs:documentation>Describes the intended purpose of the contact information.  Gives the reader an idea of what to expect on the far side.  </xs:documentation>
+				<xs:documentation>Describes the intended purpose of the contact information.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -54,7 +54,7 @@ RIXML.org Limited ("RIXML") is a UK incorporated company.  Site content is provi
 	</xs:complexType>
 	<xs:complexType name="PersonDetailsType">
 		<xs:annotation>
-			<xs:documentation>ComplexType for Person Details</xs:documentation>
+			<xs:documentation>ComplexType for Person Details.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="JobRole" type="xs:string" minOccurs="0">
@@ -126,7 +126,7 @@ RIXML.org Limited ("RIXML") is a UK incorporated company.  Site content is provi
 		<xs:sequence>
 			<xs:element name="JobRole" type="xs:string" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>Indicates the functional role played by the person relative to his/her job in the organization, for example, analyst, strategist, economist, etc.</xs:documentation>
+					<xs:documentation>Indicates the functional role played by the person relative to his/her job in the organization, for example, analyst, strategist, economist, etc. FOR INTERACTIONS STANDARD: recommendation is to omit this tag, as it contains similar information as the StandardizedRole complex element that is required for the Interactions Standard.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="FamilyName" type="xs:string">
@@ -181,11 +181,13 @@ RIXML.org Limited ("RIXML") is a UK incorporated company.  Site content is provi
 			</xs:element>
 			<xs:element name="PhotoResourceIdRef" type="xs:string" nillable="true" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>An XML Schema keyref that will link to a Resource element representing a small photograph image of the person.  Value must match a Resource.resourceID in this Product.</xs:documentation>
+					<xs:documentation>An XML Schema keyref that will link to a Resource element representing a small photograph image of the person.  FOR RESEARCH STANDARD: value must match a Resource.resourceID in this Product.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element ref="ContactInfo" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element ref="PersonLabel" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="PersonLabel" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>This element can be used to include a label by which this person is known in the context named in the personLabelContext attribute. Useful for supplying author codes that have meaning on specific vendor platforms.</xs:documentation></xs:annotation></xs:element>
 			<xs:element ref="PersonDetailsAlternativeLanguages" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="personID" type="xs:string" use="required">
@@ -625,7 +627,7 @@ This allows a consumer to determine the exact focus of the product.</xs:document
 	</xs:complexType>
 	<xs:complexType name="OrganizationType">
 		<xs:annotation>
-			<xs:documentation>ComplexType for Organisation</xs:documentation>
+			<xs:documentation>Complex type for Organization. Describes an organization related to the record. FOR RESEARCH STANDARD: multiple organizations may be related to one research item. These organizations can be subsidiaries of the same parent or different organizations (as in a joint venture) working together on a publication or event. However, there can only be one primary publisher organization, which is captured by the primaryIndicator, when contained by the Source element. FOR INTERACTIONS STANDARD: Multiple organizations are generally related to one interaction record – at a minimum, the interaction provider and at least one interaction consumer.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="LogoURL" type="xs:anyURI" minOccurs="0">
@@ -638,8 +640,14 @@ This allows a consumer to determine the exact focus of the product.</xs:document
 					<xs:documentation>For the cases in which the type attribute has the value PublisherDefined, the PublisherDefinedValue element is used to hold the organization's own description of the type.  </xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element ref="OrganizationID" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element ref="OrganizationName" maxOccurs="unbounded"/>
+			<xs:element ref="OrganizationID" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>An identifier used to identify the organization - multiple are possible. For example, for a product or interaction record distributed via multiple vendors, each vendor may require a different OrganizationID, with the idType for each OrganizationID identifying the name of the vendor in the manner specified by the vendor. The actual ID is stored as free text in the content of the OrganizationID node. 
+A UUID can also be used as one of the IDs. This is to facilitate the unique identification of a particular organization. To ensure uniqueness it is recommended that a Universal Unique IDentifier (UUID) be used as the productID. UUIDs can be generated on any computer, regardless of platform or operating system. A UUID is a 128-bit (16-byte) integer that is virtually guaranteed to be unique in the world across space and time. The Open Software Foundation (OSF) created UUIDs, as part of their Distributed Computing Environment (DCE).
+</xs:documentation></xs:annotation></xs:element>
+			<xs:element ref="OrganizationName" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The name of the organization. An organization can have multiple names as enumerated in the Name Types. At least one name is required for the content to be valid. Display name is the preferred name if only one name is provided.</xs:documentation></xs:annotation></xs:element>
 			<xs:element ref="PersonGroup" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="ContactInfo" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="Description" type="xs:string" minOccurs="0">
@@ -647,16 +655,18 @@ This allows a consumer to determine the exact focus of the product.</xs:document
 					<xs:documentation>Optional description of the organization.  Used to include any additional information about the organization.  </xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element ref="Expertise" minOccurs="0"/>
+			<xs:element ref="Expertise" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The purpose of the Expertise element within the Organization element is to identify one or more areas of expertise offered by the organization. </xs:documentation></xs:annotation></xs:element>
 		</xs:sequence>
 		<xs:attribute name="sequence" type="xs:integer" use="optional">
 			<xs:annotation>
-				<xs:documentation>If there are multiple Organizations, and they should appear in a certain order when the content is published, indicate the desired order by associating the appropriate sequence number to each Organization.  </xs:documentation>
+				<xs:documentation>If there are multiple Organizations, and they should appear in a certain order when the content is published, indicate the desired order by associating the appropriate sequence number to each Organization.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="primaryIndicator" type="rixmldt:YesNoEnum" use="required">
 			<xs:annotation>
-				<xs:documentation>Indicates the primary organization relative to others that may be specified.  When multiple organizations (subsidiaries of the same organization or different organizations) come together on a product, one must be listed as primary (generally the parent organization or the name of the joint venture).</xs:documentation>
+				<xs:documentation>Indicates the primary organization relative to others that may be specified. When multiple organizations (subsidiaries of the same organization or different organizations) publish a product or host an interaction, one must be listed as primary (generally the parent organization or the name of the joint venture). NOTE: for InteractionsStandard, this tag can be set to “Yes” for all records.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="type" type="rixmldt:OrganizationTypeEnum" use="required">
@@ -716,24 +726,24 @@ To ensure uniqueness it is recommended that a Universal Unique IDentifier (UUID)
 	</xs:attributeGroup>
 	<xs:element name="RelatedProduct">
 		<xs:annotation>
-			<xs:documentation>Describes how content contained in this product is associated with other products, or how content in other products is associated with this one. Can have none or any number of relationships to other products. </xs:documentation>
+			<xs:documentation>Describes how content contained in this product or interaction is associated with other products, or how content in other products is associated with this product or interaction. Can have none or any number of relationships to other products or interactions.</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element name="RelationshipDescription" type="xs:string" minOccurs="0">
 					<xs:annotation>
-						<xs:documentation>The description of the relationship between the current product and the other product to which it is related.</xs:documentation>
+						<xs:documentation>The description of the relationship between the current product or interaction and the product to which it is related.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 			</xs:sequence>
 			<xs:attribute name="relatedProductID" type="xs:string" use="required">
 				<xs:annotation>
-					<xs:documentation>The unique productID of the product to which this product is related (as stored in Product.productID of the related document)</xs:documentation>
+					<xs:documentation>The unique productID of the product to which this product is related.</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="relationshipType" type="rixmldt:ProductRelationshipTypeEnum" use="required">
 				<xs:annotation>
-					<xs:documentation>Indicates the type of relationship between this product and another product.</xs:documentation>
+					<xs:documentation>Indicates the type of relationship between this product and another product or interaction.</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
 		</xs:complexType>
@@ -861,7 +871,9 @@ To ensure uniqueness it is recommended that a Universal Unique IDentifier (UUID)
 			<xs:documentation>This element can be used to include a label by which this person is known in the context named in the personLabelContext attribute.  Useful for supplying author codes that have meaning on specific vendor platforms.</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
-			<xs:simpleContent>
+            <xs:annotation>
+            	<xs:documentation>This element can be used to include a label by which this person is known in the context named in the personLabelContext attribute. Useful for supplying author codes that have meaning on specific vendor platforms.</xs:documentation></xs:annotation>
+            <xs:simpleContent>
 				<xs:extension base="xs:string">
 					<xs:attribute name="personLabelContext" type="xs:string" use="optional">
 						<xs:annotation>
@@ -886,7 +898,7 @@ To ensure uniqueness it is recommended that a Universal Unique IDentifier (UUID)
 					</xs:attribute>
 					<xs:attribute name="language" type="rixmldt:ISO639-2LanguageType" use="optional">
 						<xs:annotation>
-							<xs:documentation>Indicates the language of the name value given.  Overrides the language attribute on the Research element.</xs:documentation>
+							<xs:documentation>Indicates the language of the name value given, described using the ISO 639-2/T Code. In the RIXML Research standard, overrides the language attribute on the Research element.</xs:documentation>
 						</xs:annotation>
 					</xs:attribute>
 				</xs:extension>
@@ -1065,8 +1077,13 @@ A UUID can also be used as one of the IDs.  This is to facilitate the unique ide
 						<xs:documentation>Indicates the third line of the street address.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="AddressLine4" type="xs:string" minOccurs="0"/>
-				<xs:element name="AddressLine5" type="xs:string" minOccurs="0"/>
+				<xs:element name="AddressLine4" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indicates the fourth line of the street address.</xs:documentation></xs:annotation></xs:element>
+				<xs:element name="AddressLine5" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indicates the fifth line of the street address.</xs:documentation>
+					</xs:annotation></xs:element>
 				<xs:element name="City" type="xs:string" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>Indicates the city where the street address is located.</xs:documentation>
@@ -1139,7 +1156,9 @@ A UUID can also be used as one of the IDs.  This is to facilitate the unique ide
 			<xs:documentation>Strongly Recommended.  Provides a URI reference for a web site.  </xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
-			<xs:sequence>
+            <xs:annotation>
+            	<xs:documentation>Strongly Recommended. Provides a URI reference for a web site.</xs:documentation></xs:annotation>
+            <xs:sequence>
 				<xs:element name="URL" type="xs:anyURI">
 					<xs:annotation>
 						<xs:documentation>Web address associated with the person or organization.  </xs:documentation>
